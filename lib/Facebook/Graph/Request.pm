@@ -10,7 +10,6 @@ use Facebook::Graph::Response;
 has parent => (
     is       => 'ro',
     isa      => 'Facebook::Graph::Query',
-    required => 1,
 );
 
 has ua => (

@@ -7,7 +7,6 @@ use Ouch;
 has query => (
     is       => 'ro',
     isa      => 'Facebook::Graph::Query',
-    required => 1,
 );
 
 has response => (
