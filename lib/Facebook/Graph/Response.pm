@@ -4,6 +4,12 @@ use Any::Moose;
 use JSON;
 use Ouch;
 
+has query => (
+    is       => 'ro',
+    isa      => 'Facebook::Graph::Query',
+    required => 1,
+);
+
 has response => (
     is      => 'rw',
     isa     => 'HTTP::Response',
@@ -48,6 +54,16 @@ has as_hashref => (
     },
 );
 
+has next => (
+    is  => 'ro',
+    lazy => 1,
+    default => sub {
+        my $self = shift;
+        my $url = $self->as_hashref->{paging}{next};
+        return unless $url;
+        return $self->query->request($url);
+    },
+);
 no Any::Moose;
 __PACKAGE__->meta->make_immutable;
 

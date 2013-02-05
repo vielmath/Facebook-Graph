@@ -7,6 +7,12 @@ use AnyEvent::HTTP::LWP::UserAgent;
 use AnyEvent;
 use Facebook::Graph::Response;
 
+has parent => (
+    is       => 'ro',
+    isa      => 'Facebook::Graph::Query',
+    required => 1,
+);
+
 has ua => (
     is      => 'rw',
     isa     => 'AnyEvent::HTTP::LWP::UserAgent',
@@ -22,7 +28,7 @@ sub post {
     my ($self, $uri, $params) = @_;
     my $cv = AnyEvent->condvar;
     $self->ua->post_async($uri, $params)->cb(sub {
-        $cv->send(Facebook::Graph::Response->new(response => shift->recv));
+        $cv->send(Facebook::Graph::Response->new(query => $self->parent,response => shift->recv));
     });
     return $cv;
 }
@@ -32,7 +38,7 @@ sub get {
     my $ua = $self->ua;
     my $cv = AnyEvent->condvar;
     $ua->get_async($uri)->cb(sub {
-        $cv->send(Facebook::Graph::Response->new(response => shift->recv));
+        $cv->send(Facebook::Graph::Response->new(query => $self->parent,response => shift->recv));
     });
     return $cv;
 }

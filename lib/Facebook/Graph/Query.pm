@@ -188,12 +188,13 @@ sub uri_as_string {
     my $uri = $self->uri;
     $uri->path($self->object_name);
     $uri->query_form(%query);
-    return $uri->as_string;
+    my $uas = $uri->as_string;
+    return $uas
 }
 
 sub request {
-    my ($self) = @_;
-    return Facebook::Graph::Request->new->get($self->uri_as_string)->recv;
+    my ($self,$uri) = @_;
+    return Facebook::Graph::Request->new(parent=>$self)->get($uri||$self->uri_as_string)->recv;
 }
 
 no Any::Moose;
