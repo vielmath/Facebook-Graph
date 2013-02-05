@@ -194,7 +194,7 @@ sub uri_as_string {
 
 sub request {
     my ($self,$uri) = @_;
-    return Facebook::Graph::Request->new(parent=>$self)->get($uri||$self->uri_as_string)->recv;
+    return Facebook::Graph::Request->new->get($uri||$self->uri_as_string)->recv;
 }
 
 no Any::Moose;

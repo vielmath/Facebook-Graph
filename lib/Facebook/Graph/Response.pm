@@ -4,11 +4,6 @@ use Any::Moose;
 use JSON;
 use Ouch;
 
-has query => (
-    is       => 'ro',
-    isa      => 'Facebook::Graph::Query',
-);
-
 has response => (
     is      => 'rw',
     isa     => 'HTTP::Response',
@@ -60,7 +55,7 @@ has next => (
         my $self = shift;
         my $url = $self->as_hashref->{paging}{next};
         return unless $url;
-        return $self->query->request($url);
+        return Facebook::Graph::Request->new->get($url)->recv
     },
 );
 no Any::Moose;
