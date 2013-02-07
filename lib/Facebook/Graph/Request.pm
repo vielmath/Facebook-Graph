@@ -21,20 +21,14 @@ has ua => (
 sub post {
     my ($self, $uri, $params) = @_;
     my $cv = AnyEvent->condvar;
-    $self->ua->post_async($uri, $params)->cb(sub {
-        $cv->send(Facebook::Graph::Response->new(response => shift->recv));
-    });
-    return $cv;
+    Facebook::Graph::Response->new(response => $self->ua->post_async($uri, $params)->recv);
 }
 
 sub get {
     my ($self, $uri) = @_;
     my $ua = $self->ua;
     my $cv = AnyEvent->condvar;
-    $ua->get_async($uri)->cb(sub {
-        $cv->send(Facebook::Graph::Response->new(response => shift->recv));
-    });
-    return $cv;
+    Facebook::Graph::Response->new(response => $ua->get_async($uri)->recv);
 }
 
 no Any::Moose;

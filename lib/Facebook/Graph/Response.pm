@@ -55,7 +55,7 @@ has next => (
         my $self = shift;
         my $url = $self->as_hashref->{paging}{next};
         return unless $url;
-        return Facebook::Graph::Request->new->get($url)->recv
+        return Facebook::Graph::Request->new->get($url)
     },
 );
 no Any::Moose;
