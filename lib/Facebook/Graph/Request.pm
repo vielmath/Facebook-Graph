@@ -3,32 +3,29 @@ package Facebook::Graph::Request;
 use Any::Moose;
 use JSON;
 use Ouch;
-use AnyEvent::HTTP::LWP::UserAgent;
-use AnyEvent;
+use LWP::UserAgent;
 use Facebook::Graph::Response;
 
 has ua => (
     is      => 'rw',
-    isa     => 'AnyEvent::HTTP::LWP::UserAgent',
+    isa     => 'LWP::UserAgent',
     lazy    => 1,
     default => sub {
-        my $ua = AnyEvent::HTTP::LWP::UserAgent->new;
-        $ua->timeout(30);
+        my $ua = LWP::UserAgent->new;
+        # $ua->timeout(30);
         return $ua;
     },
 );
 
 sub post {
     my ($self, $uri, $params) = @_;
-    my $cv = AnyEvent->condvar;
-    Facebook::Graph::Response->new(response => $self->ua->post_async($uri, $params)->recv);
+    Facebook::Graph::Response->new(response => $self->ua->post($uri, $params));
 }
 
 sub get {
     my ($self, $uri) = @_;
     my $ua = $self->ua;
-    my $cv = AnyEvent->condvar;
-    Facebook::Graph::Response->new(response => $ua->get_async($uri)->recv);
+    Facebook::Graph::Response->new(response => $ua->get($uri));
 }
 
 no Any::Moose;
