@@ -29,18 +29,17 @@ sub set_source {
 
 around get_post_params => sub {
     my ($orig, $self) = @_;
-
     my $post = $orig->($self);
 
     if ($self->has_message) {
-        push @$post, message => $self->message;
+        $post->{message} = $self->message;
     }
 
     if ($self->has_source) {
-        push @$post, source => [$self->source];
+        $post->{source} = [$self->source];
     }
 
-    return Content_Type => 'form-data', Content => $post;
+    return Content_Type => 'form-data', Content => $post
 };
 
 no Any::Moose;

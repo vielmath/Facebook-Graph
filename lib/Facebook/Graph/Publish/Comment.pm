@@ -22,9 +22,9 @@ around get_post_params => sub {
     my ($orig, $self) = @_;
     my $post = $orig->($self);
     if ($self->has_message) {
-        push @$post, message => $self->message;
+        $post->{message} = $self->message;
     }
-    return $post;
+    return Content => $post;
 };
 
 

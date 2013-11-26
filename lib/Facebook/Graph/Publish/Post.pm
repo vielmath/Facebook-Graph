@@ -198,40 +198,40 @@ around get_post_params => sub {
     my ($orig, $self) = @_;
     my $post = $orig->($self);
     if ($self->has_message) {
-        push @$post, message => $self->message;
+        $post->{message} = $self->message;
     }
     if ($self->has_link_uri) {
-        push @$post, link => $self->link_uri;
+        $post->{link} = $self->link_uri;
     }
     if ($self->has_link_name) {
-        push @$post, name => $self->link_name;
+        $post->{name} = $self->link_name;
     }
     if ($self->has_link_caption) {
-        push @$post, caption => $self->link_caption;
+        $post->{caption} = $self->link_caption;
     }
     if ($self->has_link_description) {
-        push @$post, description => $self->link_description;
+        $post->{description} = $self->link_description;
     }
     if ($self->has_picture_uri) {
-        push @$post, picture => $self->picture_uri;
+        $post->{picture} = $self->picture_uri;
     }
     if ($self->has_source) {
-        push @$post, source => $self->source;
+        $post->{source} = $self->source;
     }
     if ($self->has_actions) {
         foreach my $action (@{$self->actions}) {
-            push @$post, actions => JSON->new->encode($action);
+            $post->{actions} = JSON->new->encode($action);
         }
     }
     if ($self->has_privacy) {
         my %privacy = %{$self->privacy_options};
         $privacy{value} = $self->privacy;
-        push @$post, privacy => JSON->new->encode(\%privacy);
+        $post->{privacy} = JSON->new->encode(\%privacy);
     }
     if ($self->has_properties) {
-        push @$post, properties => JSON->new->encode($self->properties);
+        $post->{properties} = JSON->new->encode($self->properties);
     }
-    return $post;
+    return Content => $post;
 };
 
 

@@ -30,18 +30,21 @@ sub to {
 
 sub get_post_params {
     my $self = shift;
-    my @post;
+    my %post;
     if ($self->has_access_token) {
-        push @post, access_token => uri_unescape($self->access_token);
+        $post{access_token} = uri_unescape($self->access_token);
     }
-    return \@post;
+    return \%post;
 }
 
 sub publish {
     my ($self) = @_;
     my $uri = $self->uri;
     $uri->path($self->object_name.$self->object_path);
-    return Facebook::Graph::Request->new->post($uri, $self->get_post_params);
+    my %params = $self->get_post_params;
+    my $token = $params{access_token} || $params{Content}{access_token};
+    $uri->query_form(access_token=>$token) if $token;
+    return Facebook::Graph::Request->new->post($uri, %params);
 }
 
 

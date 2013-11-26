@@ -70,18 +70,18 @@ around get_post_params => sub {
     my ($orig, $self) = @_;
     my $post = $orig->($self);
     if ($self->has_message) {
-        push @$post, message => $self->message;
+        $post->{message} = $self->message;
     }
     if ($self->has_place) {
-        push @$post, place => $self->place;
+        $post->{place} = $self->place;
     }
     if ($self->has_tags) {
-        push @$post, tags => join(', ',@{$self->tags});
+        $post->{tags} = join(', ',@{$self->tags});
     }
     if ($self->has_latitude && $self->has_longitude) {
-        push @$post, coordinates => JSON->new->encode({ latitude => $self->latitude, longitude => $self->longitude });
+        $post->{coordinates} = JSON->new->encode({ latitude => $self->latitude, longitude => $self->longitude });
     }
-   return $post;
+   return Content => $post;
 };
 
 

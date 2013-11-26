@@ -18,8 +18,8 @@ has ua => (
 );
 
 sub post {
-    my ($self, $uri, $params) = @_;
-    Facebook::Graph::Response->new(response => $self->ua->post($uri, $params));
+    my ($self, $uri, @params) = @_;
+    Facebook::Graph::Response->new(response => $self->ua->post($uri, @params));
 }
 
 sub get {
