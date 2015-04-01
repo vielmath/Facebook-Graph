@@ -1,6 +1,7 @@
 package Facebook::Graph::Publish::Photo;
 
 use Any::Moose;
+use Encode;
 extends 'Facebook::Graph::Publish';
 
 use constant object_path => '/photos';
@@ -32,14 +33,14 @@ around get_post_params => sub {
     my $post = $orig->($self);
 
     if ($self->has_message) {
-        $post->{message} = $self->message;
+        $post->{message} = encode("utf-8", $self->message);
     }
 
     if ($self->has_source) {
         $post->{source} = [$self->source];
     }
 
-    return Content_Type => 'form-data', Content => $post
+    return Content_Type => 'multipart/form-data', Content => $post
 };
 
 no Any::Moose;
